@@ -1,13 +1,19 @@
 import PropTypes from "prop-types";
-
 import "./style.scss";
 
 export const FIELD_TYPES = {
   INPUT_TEXT: 1,
   TEXTAREA: 2,
+  EMAIL: 3, // Ajout du type EMAIL
 };
 
-const Field = ({ type = FIELD_TYPES.INPUT_TEXT, label, name, placeholder }) => {
+const Field = ({
+  type = FIELD_TYPES.INPUT_TEXT,
+  label,
+  name,
+  placeholder,
+  onChange,
+}) => {
   let component;
   switch (type) {
     case FIELD_TYPES.INPUT_TEXT:
@@ -17,11 +23,32 @@ const Field = ({ type = FIELD_TYPES.INPUT_TEXT, label, name, placeholder }) => {
           name={name}
           placeholder={placeholder}
           data-testid="field-testid"
+          onChange={onChange}
         />
       );
       break;
     case FIELD_TYPES.TEXTAREA:
-      component = <textarea name={name} data-testid="field-testid" />;
+      component = (
+        <textarea
+          name={name}
+          placeholder={placeholder}
+          data-testid="field-testid"
+          onChange={onChange}
+        />
+      );
+      break;
+    case FIELD_TYPES.EMAIL:
+      component = (
+        <input
+          type="email"
+          name={name}
+          placeholder={placeholder}
+          data-testid="field-testid"
+          autoCapitalize="none"
+          autoComplete="email"
+          onChange={(e) => onChange(e.target.value.toLowerCase())} // Conversion en minuscule
+        />
+      );
       break;
     default:
       component = (
@@ -30,6 +57,7 @@ const Field = ({ type = FIELD_TYPES.INPUT_TEXT, label, name, placeholder }) => {
           name={name}
           placeholder={placeholder}
           data-testid="field-testid"
+          onChange={onChange}
         />
       );
   }
@@ -46,12 +74,15 @@ Field.propTypes = {
   name: PropTypes.string,
   label: PropTypes.string,
   placeholder: PropTypes.string,
+  onChange: PropTypes.func, // Ajout de la prop onChange
 };
- Field.defaultProps = {
-   label: "",
-   placeholder: "",
-   type: FIELD_TYPES.INPUT_TEXT,
-   name: "field-name",
- }
+
+Field.defaultProps = {
+  label: "",
+  placeholder: "",
+  type: FIELD_TYPES.INPUT_TEXT,
+  name: "field-name",
+  onChange: () => {}, // Défaut pour onChange
+};
 
 export default Field;

@@ -1,9 +1,10 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import Form from "./index";
 
-describe("When Events is created", () => {
-  it("a list of event card is displayed", async () => {
+describe("When the Form is created", () => {
+  it("displays all the input fields", async () => {
     render(<Form />);
+    // verif éléments bien présents
     await screen.findByText("Email");
     await screen.findByText("Nom");
     await screen.findByText("Prénom");
@@ -12,18 +13,21 @@ describe("When Events is created", () => {
 
   describe("and a click is triggered on the submit button", () => {
     it("the success action is called", async () => {
-      const onSuccess = jest.fn();
+      const onSuccess = jest.fn(); // mock de la fonction onSuccess
       render(<Form onSuccess={onSuccess} />);
-      fireEvent(
-        await screen.findByTestId("button-test-id"),
-        new MouseEvent("click", {
-          cancelable: true,
-          bubbles: true,
-        })
-      );
+
+      fireEvent.change(screen.getByPlaceholderText("Entrez votre email"), {
+        target: { value: "test@example.com" },
+      });
+
+      fireEvent.click(screen.getByText("Envoyer"));
+
       await screen.findByText("En cours");
-      await screen.findByText("Envoyer");
-      expect(onSuccess).toHaveBeenCalled();
+
+      // waitFor pour attendre que la fonction onSuccess soit appelée
+      await waitFor(() => {
+        expect(onSuccess).toHaveBeenCalled();
+      });
     });
   });
 });

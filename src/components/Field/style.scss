@@ -15,7 +15,7 @@ input {
   height: 60px;
   min-width: 424px;
   font-size: 16px;
-  text-transform: capitalize;
+  // text-transform: capitalize;
   padding-left: 16px;
   border-radius: 4px;
   border: none;
@@ -25,8 +25,15 @@ input {
     color: $primary;
   }
 
+  
+  
+
   font-family: "Manrope", sans-serif;
 }
+
+
+
+
 textarea {
   height: 336px;
   min-width: 424px;
