@@ -1,8 +1,5 @@
-/* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
-/* eslint-disable jsx-a11y/click-events-have-key-events */
 import { useState } from "react";
 import PropTypes from "prop-types";
-
 import "./style.scss";
 
 const Select = ({
@@ -13,39 +10,62 @@ const Select = ({
   label,
   type = "normal",
 }) => {
-  const [value, setValue] = useState();
+  const [value, setValue] = useState("Toutes"); // initialise avec "Toutes" par défaut
   const [collapsed, setCollapsed] = useState(true);
+
   const changeValue = (newValue) => {
-    onChange();
     setValue(newValue);
-    setCollapsed(newValue);
+    setCollapsed(true);
+    onChange(newValue); // passe la nouvelle valeur a onChange
   };
+
   return (
     <div className={`SelectContainer ${type}`} data-testid="select-testid">
       {label && <div className="label">{label}</div>}
       <div className="Select">
         <ul>
+          {/* affiche la valeur sélectionnée ou "toutes" si aucunes n'est sélectionnées */}
           <li className={collapsed ? "SelectTitle--show" : "SelectTitle--hide"}>
             {value || (!titleEmpty && "Toutes")}
           </li>
           {!collapsed && (
             <>
               {!titleEmpty && (
-                <li onClick={() => changeValue(null)}>
-                  <input defaultChecked={!value} name="selected" type="radio" />{" "}
-                  Toutes
+                <li>
+                  <button
+                    onClick={() => changeValue("Toutes")}
+                    className="select-option"
+                    type="button"
+                  >
+                    <input
+                      checked={value === "Toutes"} // utilise checked pour refleter la sélection
+                      readOnly
+                      name="selected"
+                      type="radio"
+                    />{" "}
+                    Toutes
+                  </button>
                 </li>
               )}
-              {selection.map((s) => (
-                <li key={s} onClick={() => changeValue(s)}>
-                  <input
-                    defaultChecked={value === s}
-                    name="selected"
-                    type="radio"
-                  />{" "}
-                  {s}
-                </li>
-              ))}
+              {selection
+                .filter((s) => s !== "Toutes") // exclut "toutes" de la liste selection
+                .map((s) => (
+                  <li key={s}>
+                    <button
+                      onClick={() => changeValue(s)}
+                      className="select-option"
+                      type="button"
+                    >
+                      <input
+                        checked={value === s} // utilise checked pour refléter la sélection
+                        readOnly
+                        name="selected"
+                        type="radio"
+                      />{" "}
+                      {s}
+                    </button>
+                  </li>
+                ))}
             </>
           )}
         </ul>
@@ -88,7 +108,7 @@ Select.propTypes = {
   titleEmpty: PropTypes.bool,
   label: PropTypes.string,
   type: PropTypes.string,
-}
+};
 
 Select.defaultProps = {
   onChange: () => null,
@@ -96,6 +116,6 @@ Select.defaultProps = {
   label: "",
   type: "normal",
   name: "select",
-}
+};
 
 export default Select;
