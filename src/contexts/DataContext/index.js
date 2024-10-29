@@ -39,7 +39,7 @@ export const DataProvider = ({ children }) => {
     }
   }, [data, getData]);
 
-  // Calculer l'événement le plus récent
+  // calcul de l'événement le plus récent
   const lastEvent = useMemo(() => {
     if (!data?.events) return null;
     return data.events.reduce((latest, event) => {

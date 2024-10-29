@@ -10,13 +10,17 @@ const Select = ({
   label,
   type = "normal",
 }) => {
-  const [value, setValue] = useState("Toutes"); // initialise avec "Toutes" par défaut
+  const [value, setValue] = useState(titleEmpty ? "" : "Toutes"); // initialise avec "Toutes" ou "" selon titleEmpty
   const [collapsed, setCollapsed] = useState(true);
 
   const changeValue = (newValue) => {
-    setValue(newValue);
+    if (titleEmpty && newValue === "Toutes") {
+      setValue("");
+    } else {
+      setValue(newValue);
+    }
     setCollapsed(true);
-    onChange(newValue); // passe la nouvelle valeur a onChange
+    onChange(newValue);
   };
 
   return (
@@ -24,9 +28,9 @@ const Select = ({
       {label && <div className="label">{label}</div>}
       <div className="Select">
         <ul>
-          {/* affiche la valeur sélectionnée ou "toutes" si aucunes n'est sélectionnées */}
+          {/* affiche la valeur sélectionnée ou "Toutes" si aucune n'est sélectionnée et titleEmpty est false */}
           <li className={collapsed ? "SelectTitle--show" : "SelectTitle--hide"}>
-            {value || (!titleEmpty && "Toutes")}
+            {value || (titleEmpty ? "" : "Toutes")}
           </li>
           {!collapsed && (
             <>
@@ -38,7 +42,7 @@ const Select = ({
                     type="button"
                   >
                     <input
-                      checked={value === "Toutes"} // utilise checked pour refleter la sélection
+                      checked={value === "Toutes"}
                       readOnly
                       name="selected"
                       type="radio"
@@ -48,7 +52,7 @@ const Select = ({
                 </li>
               )}
               {selection
-                .filter((s) => s !== "Toutes") // exclut "toutes" de la liste selection
+                .filter((s) => s !== "Toutes") // exclut "Toutes" de la liste si elle existe
                 .map((s) => (
                   <li key={s}>
                     <button
@@ -57,7 +61,7 @@ const Select = ({
                       type="button"
                     >
                       <input
-                        checked={value === s} // utilise checked pour refléter la sélection
+                        checked={value === s}
                         readOnly
                         name="selected"
                         type="radio"
