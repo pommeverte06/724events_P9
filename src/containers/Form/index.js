@@ -19,10 +19,10 @@ const Form = ({ onSuccess, onError }) => {
       try {
         await mockContactApi();
         setSending(false);
-        onSuccess(); // appel onSuccess après succès
+        onSuccess();
       } catch (err) {
         setSending(false);
-        onError(err); // gestion de l'erreur
+        onError(err);
       }
     },
     [onSuccess, onError]
@@ -37,12 +37,16 @@ const Form = ({ onSuccess, onError }) => {
             label="Nom"
             name="name"
             id="name"
+            required 
+            autocomplete="family-name"
           />
           <Field
             placeholder="Entrez votre prénom"
             label="Prénom"
             name="firstName"
             id="firstName"
+            required
+            autocomplete="given-name"
           />
           <Select
             selection={["Personel", "Entreprise"]}
@@ -56,7 +60,9 @@ const Form = ({ onSuccess, onError }) => {
             label="Email"
             type={FIELD_TYPES.EMAIL}
             name="email"
-            id="email" // ajout d'un ID pour associer le label
+            id="email"
+            required
+            autocomplete="email"
           />
           <Button
             type={BUTTON_TYPES.SUBMIT}
@@ -72,7 +78,9 @@ const Form = ({ onSuccess, onError }) => {
             label="Message"
             type={FIELD_TYPES.TEXTAREA}
             name="message"
-            id="message" // ajout d'un ID pour associer le label
+            id="message"
+            required
+            autocomplete="off"
           />
         </div>
       </div>

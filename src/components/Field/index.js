@@ -4,7 +4,7 @@ import "./style.scss";
 export const FIELD_TYPES = {
   INPUT_TEXT: 1,
   TEXTAREA: 2,
-  EMAIL: 3, // Ajout du type EMAIL
+  EMAIL: 3, // ajout du type EMAIL
 };
 
 const Field = ({
@@ -13,6 +13,7 @@ const Field = ({
   name,
   placeholder,
   onChange,
+  required, // ajout de required
 }) => {
   let component;
   switch (type) {
@@ -24,6 +25,7 @@ const Field = ({
           placeholder={placeholder}
           data-testid="field-testid"
           onChange={onChange}
+          required={required}
         />
       );
       break;
@@ -34,6 +36,7 @@ const Field = ({
           placeholder={placeholder}
           data-testid="field-testid"
           onChange={onChange}
+          required={required}
         />
       );
       break;
@@ -47,6 +50,7 @@ const Field = ({
           autoCapitalize="none"
           autoComplete="email"
           onChange={(e) => onChange(e.target.value.toLowerCase())} // Conversion en minuscule
+          required={required}
         />
       );
       break;
@@ -58,6 +62,7 @@ const Field = ({
           placeholder={placeholder}
           data-testid="field-testid"
           onChange={onChange}
+          required={required}
         />
       );
   }
@@ -74,7 +79,8 @@ Field.propTypes = {
   name: PropTypes.string,
   label: PropTypes.string,
   placeholder: PropTypes.string,
-  onChange: PropTypes.func, // Ajout de la prop onChange
+  onChange: PropTypes.func,
+  required: PropTypes.bool, // ajout de required dans les prop types
 };
 
 Field.defaultProps = {
@@ -82,7 +88,8 @@ Field.defaultProps = {
   placeholder: "",
   type: FIELD_TYPES.INPUT_TEXT,
   name: "field-name",
-  onChange: () => {}, // Défaut pour onChange
+  onChange: () => {},
+  required: false,
 };
 
 export default Field;
