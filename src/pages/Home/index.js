@@ -13,8 +13,13 @@ import Modal from "../../containers/Modal";
 import { useData } from "../../contexts/DataContext";
 
 const Page = () => {
+  // code original:
+  // const { last } = useData();
+
+  // code modifié pour accéder au dernier evenement du tableau
   const { data } = useData();
-  const last = data?.events?.[data.events.length - 1]; // pour accéder au dernier événement du tableau
+  const last = data?.events?.[data.events.length - 1];
+
   return (
     <>
       <header>
@@ -24,6 +29,7 @@ const Page = () => {
         <section className="SliderContainer">
           <Slider />
         </section>
+        {/* ajout d'id pour accéder aux différentes sections */}
         <section id="nos-services" className="ServicesContainer">
           <h2 className="Title">Nos services</h2>
           <p>Nous organisons des événements sur mesure partout dans le monde</p>
@@ -116,15 +122,27 @@ const Page = () => {
       <footer className="row">
         <div className="col presta">
           <h3>Notre dernière prestation</h3>
+
+          {/* code original:
+        <EventCard
+          imageSrc={last?.cover}
+          title={last?.title}
+          date={new Date(last?.date)}
+          small
+          label="boom"
+        /> */}
+
+          {/* code modifié */}
           {last && (
-            <EventCard
-              imageSrc={last.cover}
-              title={last.title}
-              date={new Date(last.date)}
-              small
-              label="boom"
-            />
-          )}
+  <EventCard
+    imageSrc={last.cover}
+    title={last.title}
+    date={new Date(last.date)}
+    small
+    label="boom"
+  />
+)}
+
         </div>
 
         <div className="col contact">
@@ -133,20 +151,38 @@ const Page = () => {
           <div>01 23 45 67 89</div>
           <div>contact@724events.com</div>
           <div>
-            <a href="#twitch">
+            {/* ajout des liens pour accéder aux différents réseaux sociaux */}
+            <a
+              href="https://www.twitch.tv"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
               <Icon name="twitch" />
             </a>
-            <a href="#facebook">
+            <a
+              href="https://www.facebook.com"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
               <Icon name="facebook" />
             </a>
-            <a href="#twitter">
+            <a
+              href="https://twitter.com"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
               <Icon name="twitter" />
             </a>
-            <a href="#youtube">
+            <a
+              href="https://www.youtube.com"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
               <Icon name="youtube" />
             </a>
           </div>
         </div>
+
         <div className="col description">
           <Logo size="large" />
           <p>

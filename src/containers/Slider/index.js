@@ -1,37 +1,41 @@
 import { useEffect, useState } from "react";
 import { useData } from "../../contexts/DataContext";
 import { getMonth } from "../../helpers/Date";
-
 import "./style.scss";
 
 const Slider = () => {
   const { data } = useData();
   const [index, setIndex] = useState(0);
 
-  // faire le tri des événements par date décroissante
-  const byDateDesc = data?.focus.sort((evtA, evtB) =>
-    new Date(evtA.date) < new Date(evtB.date) ? -1 : 1
-  );
 
-  // la fonction pour passer à la photo suivante
-  const nextCard = () => {
-    setIndex((prevIndex) => (prevIndex + 1) % byDateDesc.length);
-  };
+  // code original:
+  // const byDateDesc = data?.focus.sort((evtA, evtB) =>
+  //   new Date(evtA.date) < new Date(evtB.date) ? 1 : -1
 
-  // useffect pour déclencher le changement de photo toutes les 5 secondes
+  // tri des événements par date ascendante pour afficher les plus anciens en premier
+  const byDateAsc = data?.focus
+    ? [...data.focus].sort((evtA, evtB) =>
+        new Date(evtA.date) > new Date(evtB.date) ? 1 : -1
+      )
+    : [];
+
+  // defilement automatique des photos avec setinterval
   useEffect(() => {
-    const interval = setInterval(nextCard, 5000);
-    return () => clearInterval(interval); // nettoyage pour éviter les fuites de mémoire
-  }, [byDateDesc]);
+    const interval = setInterval(() => {
+      setIndex((prevIndex) =>
+        prevIndex < byDateAsc.length - 1 ? prevIndex + 1 : 0
+      );
+    }, 5000);
+
+    return () => clearInterval(interval); // nettoyage de l'intervalle
+  }, [byDateAsc.length]);
 
   return (
     <div className="SlideCardList">
-      {byDateDesc?.map((event, idx) => (
+      {byDateAsc.map((event, idx) => (
         <div
-          key={`slide-${event.title}`} // key unique pour chaque événement
-          className={`SlideCard SlideCard--${
-            index === idx ? "display" : "hide"
-          }`}
+          key={event.title} // key unique basée sur le titre de l'événement
+          className={`SlideCard SlideCard--${index === idx ? "display" : "hide"}`}
         >
           <img src={event.cover} alt={event.title} />
           <div className="SlideCard__descriptionContainer">
@@ -46,13 +50,13 @@ const Slider = () => {
 
       <div className="SlideCard__paginationContainer">
         <div className="SlideCard__pagination">
-          {byDateDesc?.map((event) => (
+          {byDateAsc.map((event, bulletIdx) => (
             <input
-              key={`radio-${event.title}`} // utilise event.title pour une clé unique
+              key={`bullet-${event.title}`} // key unique pour chaques bullets
               type="radio"
               name="radio-button"
-              checked={index === byDateDesc.indexOf(event)}
-              onChange={() => setIndex(byDateDesc.indexOf(event))} // mise à jour de l'index selon le bouton radio cliqué
+              checked={index === bulletIdx} // synchronisation avec l'index de l'image
+              onChange={() => setIndex(bulletIdx)}
             />
           ))}
         </div>
