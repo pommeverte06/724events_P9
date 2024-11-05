@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import EventCard from "../../components/EventCard";
 import Select from "../../components/Select";
 import { useData } from "../../contexts/DataContext";
@@ -11,55 +11,46 @@ const PER_PAGE = 9;
 
 const EventList = () => {
   const { data, error } = useData();
-  const [type, setType] = useState(null);
+  const [type, setType] = useState(null); // modifs : ajout de "null" pour l'affichage de toutes les catégories (par défaut)
   const [currentPage, setCurrentPage] = useState(1);
 
-  useEffect(() => {
-    // reinitialise à la première page chaque fois que le filtre de type d'événement change
-    setCurrentPage(1);
-  }, [type]);
+  // modifs: application du filtre de type et de la pagination
+  const filteredEvents = (data?.events || [])
+    .filter((event) => !type || event.type === type) // si type est null, tous les évènements sont inclus
+    .filter(
+      (_, index) =>
+        (currentPage - 1) * PER_PAGE <= index && index < currentPage * PER_PAGE // permet la sélection des évènements pour la page actuelle
+    );
 
-  let filteredEvents = [];
-  if (data && data.events) {
-    filteredEvents = type
-      ? data.events.filter((event) => event.type === type)
-      : data.events;
-  }
-
-  // événements pour la page actuelle
-  const paginatedEvents = filteredEvents.slice(
-    (currentPage - 1) * PER_PAGE,
-    currentPage * PER_PAGE
+  // modifs:Calcul du nombre de pages pour la pagination
+  // code original:
+  // const pageNumber = Math.floor((filteredEvents?.length || 0) / PER_PAGE) + 1;
+  const pageNumber = Math.ceil(
+    (data?.events?.filter((event) => !type || event.type === type).length ||
+      0) / PER_PAGE
   );
 
-  // change le filtre de type d'événement
+  const typeList = new Set(data?.events.map((event) => event.type));
+
   const changeType = (evtType) => {
+    setCurrentPage(1);
     setType(evtType);
   };
 
-  // nombre total de pages basé sur les évenements filtrés
-  const pageNumber = Math.ceil(filteredEvents.length / PER_PAGE);
-
-  // génère des types uniques pour le menu déroulant
-  const typeList =
-    data && data.events
-      ? Array.from(new Set(data.events.map((event) => event.type)))
-      : [];
-
   return (
     <>
-      {error && <div>Une erreur est survenue</div>}
+      {error && <div>An error occurred</div>}
       {data === null ? (
-        "chargement"
+        "loading"
       ) : (
         <>
           <h3 className="SelectTitle">Catégories</h3>
           <Select
-            selection={["Toutes", ...typeList]} // ajout de "Toutes" comme première option
-            onChange={(value) => changeType(value === "Toutes" ? null : value)} // rénitialise le filtre si "Toutes" est sélectionné
+            selection={["Toutes", ...typeList]} // modifs: ajout de "Toutes" pour réinitialiser le filtre
+            onChange={(value) => changeType(value === "Toutes" ? null : value)} // modifs; si "Toutes" est sélectionné, type est défini à "null" pour afficher tous les événements
           />
           <div id="events" className="ListContainer">
-            {paginatedEvents.map((event) => (
+            {filteredEvents.map((event) => (
               <Modal key={event.id} Content={<ModalEvent event={event} />}>
                 {({ setIsOpened }) => (
                   <EventCard
@@ -74,12 +65,12 @@ const EventList = () => {
             ))}
           </div>
           <div className="Pagination">
-            {Array.from({ length: pageNumber }).map((_, n) => (
+            {[...Array(pageNumber)].map((_, n) => (
               <a
-                key={`page-${n + 1}`}
+                key={`page-${n + 1}`} // modifs: key unique basée sur le numéro de page
                 href="#events"
-                onClick={() => setCurrentPage(n + 1)}
-                className={currentPage === n + 1 ? "active" : ""}
+                onClick={() => setCurrentPage(n + 1)} // Changement de page au clic
+                className={currentPage === n + 1 ? "active" : ""} // classe "active" pour la page actuelle
               >
                 {n + 1}
               </a>

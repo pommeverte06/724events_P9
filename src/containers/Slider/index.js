@@ -19,6 +19,19 @@ const Slider = () => {
       )
     : [];
 
+
+// code original:
+//     const nextCard = () => {
+//       setTimeout(
+//         () => setIndex(index < byDateDesc.length -1 ? index + 1 : 0),
+//         5000
+//       );
+//     };
+//     useEffect(() => {
+//       nextCard();
+//     });
+    
+
   // defilement automatique des photos avec setinterval
   useEffect(() => {
     const interval = setInterval(() => {
