@@ -1,5 +1,8 @@
+/* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
+/* eslint-disable jsx-a11y/click-events-have-key-events */
 import { useState } from "react";
 import PropTypes from "prop-types";
+
 import "./style.scss";
 
 const Select = ({
@@ -10,17 +13,19 @@ const Select = ({
   label,
   type = "normal",
 }) => {
-  const [value, setValue] = useState(titleEmpty ? "" : "Toutes"); // initialise avec "Toutes" ou "" selon titleEmpty
+  const [value, setValue] = useState();
   const [collapsed, setCollapsed] = useState(true);
 
-  const changeValue = (newValue) => {
-    if (titleEmpty && newValue === "Toutes") {
-      setValue("");
-    } else {
-      setValue(newValue);
-    }
-    setCollapsed(true);
-    onChange(newValue);
+// code original:
+// const changeValue = (newValue) => {
+//   onChange();
+//   setValue(newValue);
+//   setCollapsed(newValue);
+// };
+ const changeValue = (newValue) => {
+    onChange(newValue); // passe newvalue pour déclencher la modification correcte
+    setValue(newValue);
+    setCollapsed(true); // true pour s'assurer que collapsed reçoit un booleen
   };
 
   return (
@@ -28,9 +33,8 @@ const Select = ({
       {label && <div className="label">{label}</div>}
       <div className="Select">
         <ul>
-          {/* affiche la valeur sélectionnée ou "Toutes" si aucune n'est sélectionnée et titleEmpty est false */}
           <li className={collapsed ? "SelectTitle--show" : "SelectTitle--hide"}>
-            {value || (titleEmpty ? "" : "Toutes")}
+            {value || (!titleEmpty && "Toutes")}
           </li>
           {!collapsed && (
             <>
@@ -51,18 +55,29 @@ const Select = ({
                   </button>
                 </li>
               )}
+
+              {/* code original:
+             {selection.map((s) => (
+                <li key={s} onClick={() => changeValue(s)}>
+                  <input
+                    defaultChecked={value === s}
+                    name="selected"
+                    type="radio"
+                  />{" "}
+                  {s}
+                </li>
+              ))} */}
               {selection
-                .filter((s) => s !== "Toutes") // exclut "Toutes" de la liste si elle existe
+                .filter((s) => s !== "Toutes") // exclu "Toutes" de la liste si elle existe
                 .map((s) => (
                   <li key={s}>
-                    <button
-                      onClick={() => changeValue(s)}
+                    <button 
+                      onClick={() => changeValue(s)} // appelle changevalue avec la valeur de l'option sélectionnée
                       className="select-option"
-                      type="button"
+                      type="button" // type button
                     >
                       <input
                         checked={value === s}
-                        readOnly
                         name="selected"
                         type="radio"
                       />{" "}
