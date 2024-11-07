@@ -19,7 +19,7 @@ const Form = ({ onSuccess, onError }) => {
       try {
         await mockContactApi();
         setSending(false);
-        onSuccess();
+        onSuccess(); // ajout de onSuccess après l'envoi réussi
       } catch (err) {
         setSending(false);
         onError(err);
@@ -33,12 +33,12 @@ const Form = ({ onSuccess, onError }) => {
       <div className="row">
         <div className="col">
           <Field
-            placeholder="Entrez votre nom"
+            placeholder="Entrez votre nom" // ajout
             label="Nom"
-            name="name"
-            id="name"
-            required 
-            autocomplete="family-name"
+            name="name" // ajout
+            id="name" // ajout
+            required // ajout
+            autocomplete="family-name" // ajout
           />
           <Field
             placeholder="Entrez votre prénom"
@@ -58,7 +58,7 @@ const Form = ({ onSuccess, onError }) => {
           <Field
             placeholder="Entrez votre email"
             label="Email"
-            type={FIELD_TYPES.EMAIL}
+            type={FIELD_TYPES.EMAIL} // ajout
             name="email"
             id="email"
             required
@@ -80,7 +80,7 @@ const Form = ({ onSuccess, onError }) => {
             name="message"
             id="message"
             required
-            autocomplete="off"
+            autocomplete="off" // ajout
           />
         </div>
       </div>

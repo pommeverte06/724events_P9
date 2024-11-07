@@ -49,8 +49,8 @@ const Field = ({
           data-testid="field-testid"
           autoCapitalize="none"
           autoComplete="email"
-          onChange={(e) => onChange(e.target.value.toLowerCase())} // Conversion en minuscule
-          required={required}
+          onChange={(e) => onChange(e.target.value.toLowerCase())} // conversion en minuscule
+          required={required} 
         />
       );
       break;
