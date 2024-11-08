@@ -14,15 +14,15 @@ const EventList = () => {
   const [type, setType] = useState(null); // modifs : ajout de "null" pour l'affichage de toutes les catégories (par défaut)
   const [currentPage, setCurrentPage] = useState(1);
 
-  // modifs: application du filtre de type et de la pagination
   const filteredEvents = (data?.events || [])
+    // modifs: application du filtre de type et de la pagination
     .filter((event) => !type || event.type === type) // si type est null, tous les évènements sont inclus
     .filter(
       (_, index) =>
         (currentPage - 1) * PER_PAGE <= index && index < currentPage * PER_PAGE // permet la sélection des évènements pour la page actuelle
     );
 
-  // modifs:Calcul du nombre de pages pour la pagination
+  // modifs:calcul du nombre de pages pour afficher les évènemments
   // code original:
   // const pageNumber = Math.floor((filteredEvents?.length || 0) / PER_PAGE) + 1;
   const pageNumber = Math.ceil(
@@ -47,7 +47,7 @@ const EventList = () => {
           <h3 className="SelectTitle">Catégories</h3>
           <Select
             selection={["Toutes", ...typeList]} // modifs: ajout de "Toutes" pour réinitialiser le filtre
-            onChange={(value) => changeType(value === "Toutes" ? null : value)} // modifs; si "Toutes" est sélectionné, type est défini à "null" pour afficher tous les événements
+            onChange={(value) => changeType(value === "Toutes" ? null : value)} // modifs: si "Toutes" est cliquée, type est défini à "null" pour afficher tous les événements
           />
           <div id="events" className="ListContainer">
             {filteredEvents.map((event) => (
@@ -69,7 +69,7 @@ const EventList = () => {
               <a
                 key={`page-${n + 1}`} // modifs: key unique basée sur le numéro de page
                 href="#events"
-                onClick={() => setCurrentPage(n + 1)} // Changement de page au clic
+                onClick={() => setCurrentPage(n + 1)} // modif: changement de page au clic
                 className={currentPage === n + 1 ? "active" : ""} // classe "active" pour la page actuelle
               >
                 {n + 1}

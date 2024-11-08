@@ -7,7 +7,6 @@ const Slider = () => {
   const { data } = useData();
   const [index, setIndex] = useState(0);
 
-
   // code original:
   // const byDateDesc = data?.focus.sort((evtA, evtB) =>
   //   new Date(evtA.date) < new Date(evtB.date) ? 1 : -1
@@ -19,29 +18,15 @@ const Slider = () => {
       )
     : [];
 
-
-// code original:
-//     const nextCard = () => {
-//       setTimeout(
-//         () => setIndex(index < byDateDesc.length -1 ? index + 1 : 0),
-//         5000
-//       );
-//     };
-//     useEffect(() => {
-//       nextCard();
-//     });
-    
-
-  // defilement automatique des photos avec setinterval
+  const nextCard = () => {
+    setTimeout(
+      () => setIndex(index < byDateAsc.length - 1 ? index + 1 : 0),
+      5000
+    );
+  };
   useEffect(() => {
-    const interval = setInterval(() => {
-      setIndex((prevIndex) =>
-        prevIndex < byDateAsc.length - 1 ? prevIndex + 1 : 0
-      );
-    }, 5000);
-
-    return () => clearInterval(interval); // nettoyage de l'intervalle
-  }, [byDateAsc.length]);
+    nextCard();
+  });
 
   return (
     <div className="SlideCardList">
@@ -69,7 +54,8 @@ const Slider = () => {
               type="radio"
               name="radio-button"
               checked={index === bulletIdx} // synchronisation avec l'index de l'image
-              onChange={() => setIndex(bulletIdx)}
+              // onChange={() => setIndex(bulletIdx)}
+              readOnly
             />
           ))}
         </div>

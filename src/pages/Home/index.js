@@ -29,7 +29,6 @@ const Page = () => {
         <section className="SliderContainer">
           <Slider />
         </section>
-        {/* ajout d'id pour accéder aux différentes sections */}
         <section id="nos-services" className="ServicesContainer">
           <h2 className="Title">Nos services</h2>
           <p>Nous organisons des événements sur mesure partout dans le monde</p>
@@ -69,31 +68,37 @@ const Page = () => {
           <div className="ListContainer">
             <PeopleCard
               imageSrc="/images/stephanie-liverani.png"
+              alt="photo de samira CEO de 724 events"
               name="Samira"
               position="CEO"
             />
             <PeopleCard
               imageSrc="/images/linkedin.png"
+              alt="photo de jean-baptiste directeur marketing de 724 events"
               name="Jean-baptiste"
               position="Directeur marketing"
             />
             <PeopleCard
               imageSrc="/images/christina-wocintechcha.png"
+              alt="photo de alice CXO de 724 events"
               name="Alice"
               position="CXO"
             />
             <PeopleCard
               imageSrc="/images/jonas-kakaroto.png"
+              alt="photo de luis animateur de 724 events"
               name="Luís"
               position="Animateur"
             />
             <PeopleCard
               imageSrc="/images/amy-hirschi.png"
+              alt="photo de christine VP animation de 724 events"
               name="Christine"
               position="VP animation"
             />
             <PeopleCard
               imageSrc="/images/christina-wocintechchat-com.png"
+              alt="photo de isabelle VP communication de 724 events"
               name="Isabelle"
               position="VP communication"
             />
