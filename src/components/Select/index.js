@@ -15,19 +15,11 @@ const Select = ({
 }) => {
   const [value, setValue] = useState();
   const [collapsed, setCollapsed] = useState(true);
-
-// code original:
-// const changeValue = (newValue) => {
-//   onChange();
-//   setValue(newValue);
-//   setCollapsed(newValue);
-// };
- const changeValue = (newValue) => {
-    onChange(newValue); // passe newvalue pour déclencher la modification correcte
+  const changeValue = (newValue) => {
+    onChange(newValue); // passe newValue pour déclencher la modification correcte
     setValue(newValue);
-    setCollapsed(true); // true pour s'assurer que collapsed reçoit un booleen
+    setCollapsed(true); // assure que collapsed reçoit un booléen
   };
-
   return (
     <div className={`SelectContainer ${type}`} data-testid="select-testid">
       {label && <div className="label">{label}</div>}
@@ -39,25 +31,12 @@ const Select = ({
           {!collapsed && (
             <>
               {!titleEmpty && (
-                <li>
-                  <button
-                    onClick={() => changeValue("Toutes")}
-                    className="select-option"
-                    type="button"
-                  >
-                    <input
-                      checked={value === "Toutes"}
-                      readOnly
-                      name="selected"
-                      type="radio"
-                    />{" "}
-                    Toutes
-                  </button>
+                <li onClick={() => changeValue(null)}>
+                  <input defaultChecked={!value} name="selected" type="radio" />{" "}
+                  Toutes
                 </li>
               )}
-
-              {/* code original:
-             {selection.map((s) => (
+              {selection.map((s) => (
                 <li key={s} onClick={() => changeValue(s)}>
                   <input
                     defaultChecked={value === s}
@@ -66,25 +45,7 @@ const Select = ({
                   />{" "}
                   {s}
                 </li>
-              ))} */}
-              {selection
-                .filter((s) => s !== "Toutes") // exclu "Toutes" de la liste si elle existe
-                .map((s) => (
-                  <li key={s}>
-                    <button 
-                      onClick={() => changeValue(s)} // appelle changevalue avec la valeur de l'option sélectionnée
-                      className="select-option"
-                      type="button" // type button
-                    >
-                      <input
-                        checked={value === s}
-                        name="selected"
-                        type="radio"
-                      />{" "}
-                      {s}
-                    </button>
-                  </li>
-                ))}
+              ))}
             </>
           )}
         </ul>

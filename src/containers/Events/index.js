@@ -16,16 +16,18 @@ const EventList = () => {
 
   const filteredEvents = (data?.events || [])
     // modifs: application du filtre de type et de la pagination
-    .filter((event) => !type || event.type === type) // si type est null, tous les évènements sont inclus
+    .filter((event) => !type || event.type === type) // filtre par type, si type est null, tous les évènements sont inclus
     .filter(
       (_, index) =>
-        (currentPage - 1) * PER_PAGE <= index && index < currentPage * PER_PAGE // permet la sélection des évènements pour la page actuelle
+        (currentPage - 1) * PER_PAGE <= index && index < currentPage * PER_PAGE // affiche uniquement les evnmts correspondant à la page actuelle.
     );
 
   // modifs:calcul du nombre de pages pour afficher les évènemments
   // code original:
   // const pageNumber = Math.floor((filteredEvents?.length || 0) / PER_PAGE) + 1;
-  const pageNumber = Math.ceil(
+
+  // utilisation de math.ceil pour avoir le bon nombre de pages
+  const pageNumber = Math.ceil( 
     (data?.events?.filter((event) => !type || event.type === type).length ||
       0) / PER_PAGE
   );
@@ -46,8 +48,12 @@ const EventList = () => {
         <>
           <h3 className="SelectTitle">Catégories</h3>
           <Select
-            selection={["Toutes", ...typeList]} // modifs: ajout de "Toutes" pour réinitialiser le filtre
-            onChange={(value) => changeType(value === "Toutes" ? null : value)} // modifs: si "Toutes" est cliquée, type est défini à "null" pour afficher tous les événements
+           
+            selection={Array.from(typeList)}
+            onChange={(value) => (value ? changeType(value) : changeType(null))}
+
+
+
           />
           <div id="events" className="ListContainer">
             {filteredEvents.map((event) => (
@@ -65,12 +71,10 @@ const EventList = () => {
             ))}
           </div>
           <div className="Pagination">
-            {[...Array(pageNumber)].map((_, n) => (
-              <a
-                key={`page-${n + 1}`} // modifs: key unique basée sur le numéro de page
-                href="#events"
-                onClick={() => setCurrentPage(n + 1)} // modif: changement de page au clic
-                className={currentPage === n + 1 ? "active" : ""} // classe "active" pour la page actuelle
+            {[...Array(pageNumber || 0)].map((_, n) => (
+              // eslint-disable-next-line react/no-array-index-key
+              <a key={n} href="#events" onClick={() => setCurrentPage(n + 1)}
+              className={currentPage === n + 1 ? "active" : ""} // ajout classe "active" pour indiquer visuellement quelle page est active
               >
                 {n + 1}
               </a>
