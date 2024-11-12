@@ -16,9 +16,9 @@ const Page = () => {
   // code original:
   // const { last } = useData();
 
-  // code modifié pour accéder au dernier evenement du tableau
+  // code modifié pour accéder aux datas et dernier evenement du tableau
   const { data } = useData();
-  const last = data?.events?.[data.events.length - 1];
+  const last = data?.events?.[data.events.length - 1]; // creation de la variable last pour obtenir le dernier evnmt du tableau
 
   return (
     <>

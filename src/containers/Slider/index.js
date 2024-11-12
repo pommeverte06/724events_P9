@@ -13,7 +13,7 @@ const Slider = () => {
 
   // tri des événements par date ascendante pour afficher les plus anciens en premier
   const byDateAsc = data?.focus
-    ? data.focus.sort((evtA, evtB) =>
+  ? data.focus.sort((evtA, evtB) =>
         new Date(evtA.date) > new Date(evtB.date) ? 1 : -1
       )
     : [];

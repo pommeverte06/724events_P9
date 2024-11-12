@@ -19,7 +19,7 @@ const Form = ({ onSuccess, onError }) => {
       try {
         await mockContactApi();
         setSending(false);
-        onSuccess(); // ajout de onSuccess après l'envoi réussi
+        onSuccess(); // ajout de onSuccess pour quand l'envoi du formulaire est réussi
       } catch (err) {
         setSending(false);
         onError(err);
@@ -29,7 +29,7 @@ const Form = ({ onSuccess, onError }) => {
   );
 
   return (
-    <form onSubmit={sendContact} data-testid="form">
+    <form onSubmit={sendContact}>
       <div className="row">
         <div className="col">
           <Field
