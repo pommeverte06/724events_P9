@@ -9,15 +9,24 @@ const Slider = () => {
 
   // code original:
   // const byDateDesc = data?.focus.sort((evtA, evtB) =>
-  //   new Date(evtA.date) < new Date(evtB.date) ? 1 : -1
+  //   new Date(evtA.date) < new Date(evtB.date) ? -1 : 1
 
   // tri des événements par date ascendante pour afficher les plus anciens en premier
   const byDateAsc = data?.focus
-  ? data.focus.sort((evtA, evtB) =>
+    ? data.focus.sort((evtA, evtB) =>
         new Date(evtA.date) > new Date(evtB.date) ? 1 : -1
       )
     : [];
 
+  // code original:
+  // const nextCard = () => {
+  //   setTimeout(
+  //     () => setIndex(index < byDateDesc.length ? index + 1 : 0),
+  //     5000
+  //   );
+  // };
+
+  // correction du nombre d'évènements affichés
   const nextCard = () => {
     setTimeout(
       () => setIndex(index < byDateAsc.length - 1 ? index + 1 : 0),

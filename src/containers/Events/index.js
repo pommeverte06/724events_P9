@@ -14,6 +14,25 @@ const EventList = () => {
   const [type, setType] = useState(null); // modifs : ajout de "null" pour l'affichage de toutes les catégories (par défaut)
   const [currentPage, setCurrentPage] = useState(1);
 
+// code original:
+// const filteredEvents = (
+//   (!type
+//     ? data?.events
+//     : data?.events) || []
+// ).filter((event, index) => {
+//   if (
+//     (currentPage - 1) * PER_PAGE <= index &&
+//     PER_PAGE * currentPage > index
+//   ) {
+//     return true;
+//   }
+//   return false;
+// });
+
+
+
+
+
   const filteredEvents = (data?.events || [])
     // modifs: application du filtre de type et de la pagination
     .filter((event) => !type || event.type === type) // filtre par type, si type est null, tous les évènements sont inclus
